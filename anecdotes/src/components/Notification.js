@@ -11,9 +11,10 @@ class Notification extends React.Component {
       borderWidth: 1
     }
     return (
-      <div style={style}>
-        {notification}
-      </div>
+      notification === null ? null :
+        <div style={style}>
+          {notification}
+        </div>
     )
   }
 }

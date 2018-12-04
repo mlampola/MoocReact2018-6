@@ -1,48 +1,43 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Anecdote from './Anecdote'
+import Filter from './Filter'
 import { anecdoteVote } from './../reducers/anecdoteReducer'
 import { notificationChange, notificationReset } from './../reducers/notificationReducer'
 
-class AnecdoteList extends React.Component {
-  handleClick = (event) => {
+const AnecdoteList = (props) => {
+  const handleClick = (event) => {
     event.preventDefault()
-    const anecdote = this.props.anecdotes.find(a => a.id === event.target.id)
-    this.props.anecdoteVote(event.target.id)
-    this.props.notificationChange(`You voted '${anecdote.content}'`)
+    const anecdote = props.anecdotes.find(a => a.id === event.target.id)
+    props.anecdoteVote(event.target.id)
+    props.notificationChange(`You voted '${anecdote.content}'`)
     setTimeout(() => {
-      this.props.notificationReset()
+      props.notificationReset()
     }, 5000)
   }
 
-  render() {
-    const anecdotes = this.props.anecdotes
-    const filter = this.props.filter.toLowerCase()
-    return (
-      <div>
-        {anecdotes
-          .filter(a => filter === '' || a.content.toLowerCase().indexOf(filter) > -1)
-          .sort((a, b) => b.votes - a.votes)
-          .map(anecdote =>
-            <div key={anecdote.id}>
-              <div>
-                {anecdote.content}
-              </div>
-              <div>
-                has {anecdote.votes}
-                <button id={anecdote.id} onClick={this.handleClick}>
-                  Vote
-                </button>
-              </div>
-            </div>)}
-      </div>
-    )
-  }
+  return (
+    <div>
+      <p></p>
+      <Filter />
+      {props.visibleAnecdotes
+        .map(anecdote => <Anecdote key={anecdote.id} anecdote={anecdote} handleVote={handleClick} />
+        )}
+    </div>
+  )
+}
+
+const anecdotesToShow = (anecdotes, filter) => {
+  return anecdotes
+    .filter(a => filter === '' || a.content.toLowerCase().indexOf(filter) > -1)
+    .sort((a, b) => b.votes - a.votes)
 }
 
 const mapStateToProps = (state) => {
   return {
     anecdotes: state.anecdotes,
-    filter: state.filter
+    filter: state.filter,
+    visibleAnecdotes: anecdotesToShow(state.anecdotes, state.filter)
   }
 }
 
