@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes'
+
 const anecdotesAtStart = []
 
 const getId = () => (100000 * Math.random()).toFixed(0)
@@ -12,13 +14,19 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
+const saveVote = async (anecdote) => {
+  await anecdoteService.update(anecdote)
+}
+
 const reducer = (store = initialState, action) => {
 
   switch (action.type) {
   case 'VOTE': {
     const old = store.filter(a => a.id !== action.id)
     const voted = store.find(a => a.id === action.id)
-    return [...old, { ...voted, votes: voted.votes + 1 }]
+    voted.votes = voted.votes + 1
+    saveVote(voted)
+    return [...old, voted]
   }
 
   case 'CREATE':
