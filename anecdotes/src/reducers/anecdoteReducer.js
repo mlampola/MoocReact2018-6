@@ -22,7 +22,7 @@ const reducer = (store = initialState, action) => {
   }
 
   case 'CREATE':
-    return [...store, { content: action.content, id: getId(), votes: 0 }]
+    return [...store, action.data]
 
   case 'INIT_ANECDOTES':
     return action.data
@@ -32,10 +32,10 @@ const reducer = (store = initialState, action) => {
   }
 }
 
-export const anecdoteCreation = (content) => {
+export const anecdoteCreation = (data) => {
   return {
     type: 'CREATE',
-    content
+    data
   }
 }
 

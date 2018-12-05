@@ -29,7 +29,7 @@ const AnecdoteList = (props) => {
 
 const anecdotesToShow = (anecdotes, filter) => {
   return anecdotes
-    .filter(a => filter === '' || a.content.toLowerCase().indexOf(filter) > -1)
+    .filter(a => filter === '' || a.content.toLowerCase().indexOf(filter.toLowerCase()) > -1)
     .sort((a, b) => b.votes - a.votes)
 }
 
