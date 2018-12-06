@@ -19,7 +19,6 @@ const saveVote = async (anecdote) => {
 }
 
 const reducer = (store = initialState, action) => {
-
   switch (action.type) {
   case 'VOTE': {
     const old = store.filter(a => a.id !== action.id)
@@ -33,7 +32,7 @@ const reducer = (store = initialState, action) => {
     return [...store, action.data]
 
   case 'INIT_ANECDOTES':
-    return action.data
+    return action.anecdotes
 
   default:
     return store
@@ -54,10 +53,13 @@ export const anecdoteVote = (id) => {
   }
 }
 
-export const anecdoteInitialization = (data) => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data
+export const anecdoteInitialization = () => {
+  return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      anecdotes
+    })
   }
 }
 
