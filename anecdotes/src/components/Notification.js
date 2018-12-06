@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { notificationChange, notificationReset } from './../reducers/notificationReducer'
+import { notify } from './../reducers/notificationReducer'
 
 class Notification extends React.Component {
   render() {
@@ -27,7 +27,7 @@ const mapStateToProps = (state) => {
 
 const ConnectedNotification = connect(
   mapStateToProps,
-  { notificationChange, notificationReset }
+  { notify }
 )(Notification)
 
 export default ConnectedNotification

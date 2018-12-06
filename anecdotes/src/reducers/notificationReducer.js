@@ -9,14 +9,19 @@ const reducer = (store = null, action) => {
   return store
 }
 
-export const notificationChange = (notification) => {
-  return {
-    type: 'NOTIFICATION',
-    notification
+export const notify = (notification, seconds) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'NOTIFICATION',
+      notification
+    })
+    setTimeout(() => {
+      dispatch(notificationReset())
+    }, seconds * 1000)
   }
 }
 
-export const notificationReset = () => {
+const notificationReset = () => {
   return {
     type: 'RESET'
   }

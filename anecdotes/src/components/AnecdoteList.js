@@ -3,17 +3,14 @@ import { connect } from 'react-redux'
 import Anecdote from './Anecdote'
 import Filter from './Filter'
 import { anecdoteVote } from './../reducers/anecdoteReducer'
-import { notificationChange, notificationReset } from './../reducers/notificationReducer'
+import { notify } from './../reducers/notificationReducer'
 
 const AnecdoteList = (props) => {
   const handleClick = (event) => {
     event.preventDefault()
     const anecdote = props.anecdotes.find(a => a.id === event.target.id)
     props.anecdoteVote(event.target.id)
-    props.notificationChange(`You voted '${anecdote.content}'`)
-    setTimeout(() => {
-      props.notificationReset()
-    }, 5000)
+    props.notify(`You voted '${anecdote.content}'`, 5)
   }
 
   return (
@@ -43,7 +40,7 @@ const mapStateToProps = (state) => {
 
 const ConnectedAnecdoteList = connect(
   mapStateToProps,
-  { anecdoteVote, notificationChange, notificationReset }
+  { anecdoteVote, notify }
 )(AnecdoteList)
 
 export default ConnectedAnecdoteList
