@@ -1,11 +1,17 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 
 const Menu = () => (
   <div>
     <Link to="/">anecdotes</Link> &nbsp;
     <Link to="/create">create new</Link> &nbsp;
     <Link to="/about">about</Link>
+  </div>
+)
+
+const Notification = ({ notification }) => (
+  <div>
+    <p>{notification}</p>
   </div>
 )
 
@@ -17,16 +23,20 @@ const Anecdote = ({ anecdote }) => (
   </div>
 )
 
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >
-        <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-      </li>)}
-    </ul>
-  </div>
-)
+const AnecdoteList = ({ anecdotes, resetRedirect }) => {
+  resetRedirect() // Possibly set in the creation form
+
+  return (
+    <div>
+      <h2>Anecdotes</h2>
+      <ul>
+        {anecdotes.map(anecdote => <li key={anecdote.id} >
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>)}
+      </ul>
+    </div >
+  )
+}
 
 const About = () => (
   <div>
@@ -77,24 +87,26 @@ class CreateNew extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2>create a new anecdote</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            content
+      this.props.redirect
+        ? <Redirect to="/" />
+        : <div>
+          <h2>create a new anecdote</h2>
+          <form onSubmit={this.handleSubmit}>
+            <div>
+              content
             <input name='content' value={this.state.content} onChange={this.handleChange} />
-          </div>
-          <div>
-            author
+            </div>
+            <div>
+              author
             <input name='author' value={this.state.author} onChange={this.handleChange} />
-          </div>
-          <div>
-            url for more info
+            </div>
+            <div>
+              url for more info
             <input name='info' value={this.state.info} onChange={this.handleChange} />
-          </div>
-          <button>create</button>
-        </form>
-      </div>
+            </div>
+            <button>create</button>
+          </form>
+        </div>
     )
   }
 }
@@ -120,13 +132,30 @@ class App extends React.Component {
           id: '2'
         }
       ],
-      notification: ''
+      notification: '',
+      redirect: false
     }
   }
 
   addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
-    this.setState({ anecdotes: this.state.anecdotes.concat(anecdote) })
+    this.setState({
+      anecdotes: this.state.anecdotes.concat(anecdote),
+      notification: `a new anecdote ${anecdote.content} created`,
+      redirect: true
+    })
+    setTimeout(() => {
+      this.setState({
+        notification: ''
+      })
+    }, 5000)
+  }
+
+  resetRedirect = () => {
+    if (this.state.redirect) {
+      console.log('Reset redirect')
+      this.setState({ redirect: false })
+    }
   }
 
   anecdoteById = (id) =>
@@ -152,11 +181,12 @@ class App extends React.Component {
           <div>
             <h1>Software anecdotes</h1>
             <Menu />
-            <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
+            <Notification notification={this.state.notification} />
+            <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} resetRedirect={this.resetRedirect} />} />
             <Route path="/about" render={() => <About />} />
-            <Route path="/create" render={() => <CreateNew addNew={this.addNew} />} />
+            <Route path="/create" render={() => <CreateNew addNew={this.addNew} notification={this.state.notification} redirect={this.state.redirect} />} />
             <Route exact path="/anecdotes/:id" render={({ match }) =>
-              <Anecdote anecdote={this.anecdoteById(match.params.id)} />} 
+              <Anecdote anecdote={this.anecdoteById(match.params.id)} />}
             />
             <Footer />
           </div>
