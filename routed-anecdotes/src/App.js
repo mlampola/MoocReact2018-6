@@ -9,11 +9,24 @@ const Menu = () => (
   </div>
 )
 
-const Notification = ({ notification }) => (
-  <div>
-    <p>{notification}</p>
-  </div>
-)
+const Notification = ({ notification }) => {
+  const style = {
+    color: 'green',
+    background: 'white',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  return (
+    notification === '' ? null :
+      <div style={style}>
+        {notification}
+      </div>
+  )
+}
 
 const Anecdote = ({ anecdote }) => (
   <div>
