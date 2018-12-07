@@ -1,17 +1,28 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 
-const Menu = () => (
-  <div>
-    <Link to="/">anecdotes</Link> &nbsp;
-    <Link to="/create">create new</Link> &nbsp;
-    <Link to="/about">about</Link>
-  </div>
-)
+const Menu = () => {
+  const style = {
+    color: 'lightblue',
+    background: 'lightblue',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  return (
+    <div style={style}>
+      <Link to="/">anecdotes</Link> &nbsp;
+      <Link to="/create">create new</Link> &nbsp;
+      <Link to="/about">about</Link>
+    </div>)
+}
 
 const Notification = ({ notification }) => {
   const style = {
-    color: 'green',
+    color: 'blue',
     background: 'white',
     fontSize: 20,
     borderStyle: 'solid',
