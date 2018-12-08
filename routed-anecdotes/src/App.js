@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
-import { Container, Table, Grid, Image } from 'semantic-ui-react'
+import { Container, Table, Grid, Image, Form, Button } from 'semantic-ui-react'
 
 const Menu = () => {
   const style = {
@@ -23,7 +23,7 @@ const Menu = () => {
 
 const Notification = ({ notification }) => {
   const style = {
-    color: 'blue',
+    color: 'lightblue',
     background: 'white',
     fontSize: 20,
     borderStyle: 'solid',
@@ -90,13 +90,25 @@ const About = () => (
   </div>
 )
 
-const Footer = () => (
-  <div>
-    Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.
+const Footer = () => {
+  const style = {
+    color: 'steelblue',
+    background: 'lightblue',
+    fontSize: 14,
+    borderStyle: 'none',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    textAlign: 'center'
+  }
 
-    See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code.
-</div>
-)
+  return (
+    <div style={style}>
+      <p>Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.</p>
+      <p>See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code.</p>
+    </div >
+  )
+}
 
 class CreateNew extends React.Component {
   constructor() {
@@ -129,21 +141,21 @@ class CreateNew extends React.Component {
         ? <Redirect to="/" />
         : <div>
           <h2>create a new anecdote</h2>
-          <form onSubmit={this.handleSubmit}>
-            <div>
-              content
-            <input name='content' value={this.state.content} onChange={this.handleChange} />
-            </div>
-            <div>
-              author
-            <input name='author' value={this.state.author} onChange={this.handleChange} />
-            </div>
-            <div>
-              url for more info
-            <input name='info' value={this.state.info} onChange={this.handleChange} />
-            </div>
-            <button>create</button>
-          </form>
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Field>
+              <label>content</label>
+              <input name='content' value={this.state.content} onChange={this.handleChange} />
+            </Form.Field>
+            <Form.Field>
+              <label>author</label>
+              <input name='author' value={this.state.author} onChange={this.handleChange} />
+            </Form.Field>
+            <Form.Field>
+              <label>url for more info</label>
+              <input name='info' value={this.state.info} onChange={this.handleChange} />
+            </Form.Field>
+            <Button type='submit'>create</Button>
+          </Form>
         </div>
     )
   }
